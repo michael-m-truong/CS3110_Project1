@@ -1,17 +1,62 @@
-import java.lang.ProcessBuilder.Redirect.Type;
+import java.util.Scanner;
 
 public class Calculator {
     public static void main(String[] args) {
-        String str = "3.14e-1";  //
-       // float test = 123.022f;
-        //System.out.println(test);
-        //System.out.println(Float.parseFloat(str));
-        //System.out.println(123.002f);
-        //System.out.println(reverseNum(2));
-        System.out.println(parseString(str));
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter input string to convert to decimal: ");
 
+        String inputStr = input.nextLine();
+        inputStr = removeUnderscore(inputStr);
+        if (inputValidation(inputStr)) {
+            double value = parseString(inputStr);
+            System.out.println(value);
+            input.close();
+        }
+        else 
+            System.out.println("Not a valid Java floating decimal literal");
     }
 
+    private static String removeUnderscore(String str) {
+        String newStr = "";
+        for (int i = 0; i < str.length(); i++) {
+            char num = str.charAt(i);
+            if (num != '_')
+                newStr+=num;
+        }
+        return newStr;
+    }
+
+    private static boolean inputValidation(String str) {
+        int e_count = 0;
+        int dot_count = 0;
+        for (int i = 0; i < str.length(); i++) {
+            char num = str.charAt(i);
+            if (num == 'e') {
+                e_count++;
+                if (dot_count > 1 || e_count > 1) 
+                    return false;
+            }
+            else if (num == '.') {
+                dot_count++;
+                if (dot_count > 1 || e_count > 1) 
+                    return false;
+            }
+            else if (i == str.length()-1) {
+                if (num != '0' && num != '1' && num != '2' && num != '3' && num != '4' && num != '5' && num != '6' && num != '7' 
+                && num != '8' && num != '9' && num != '.' && num != '+' && num != '-') {
+                    if (num == 'f' || num == 'F' || num == 'd' || num == 'D') {
+                        return true;
+                    }
+                    else
+                        return false;
+                }
+            }
+            else if (num != '0' && num != '1' && num != '2' && num != '3' && num != '4' && num != '5' && num != '6' && num != '7' && num != '8' 
+                && num != '9' && num != '.' && num != '+' && num != '-') 
+                return false;
+        }
+        return true;
+    }
 
     private static double parseString(String str) {
         double result = 0;
@@ -23,12 +68,10 @@ public class Calculator {
         int decimalPlace = 0;
         int powerPlace = 0;
         for (int i = 0; i < str.length(); i++) {
-            //System.out.println(result);
             if (lessThanOne)
                 decimalPlace++;
             if (powerOn)
                 powerPlace++;
-                //System.out.println(powerPlace);
 
             char num = str.charAt(i);
             if (num == '-' && i == 0)
@@ -39,22 +82,17 @@ public class Calculator {
                     powerof10_negative = true;
             }
             else if (num == '.') {
-                //System.out.println(result);
                 lessThanOne = true;
                 result = reverseNum(result);
-                //System.out.println(result + "g");
             }
 
+            /*Multiply by 10^n if number on right side of decimal */
             else if (num == '0' && powerOn)
                 powerOf10 += Math.pow(10, powerPlace)*0;
             else if (num == '1' && powerOn)
                 powerOf10 += Math.pow(10, powerPlace)*1;
-            else if (num == '2' && powerOn) {
-                //System.out.println(powerPlace + "hi");
+            else if (num == '2' && powerOn)
                 powerOf10 += Math.pow(10, powerPlace)*2;
-                //System.out.println(powerOf10);
-            }
-                
             else if (num == '3' && powerOn)
                 powerOf10 += Math.pow(10, powerPlace)*3;
             else if (num == '4' && powerOn)
@@ -71,17 +109,13 @@ public class Calculator {
                 powerOf10 += Math.pow(10, powerPlace)*9;
 
 
-
+            /*Multply by 10^(-n) if number on right side of decimal */
             else if (num == '0' && lessThanOne)
                 result += Math.pow(10, -decimalPlace)*0;
             else if (num == '1' && lessThanOne)
                 result += Math.pow(10, -decimalPlace)*1;
-            else if (num == '2' && lessThanOne) {
-                //System.out.println(result);
-                //System.out.println(Math.pow(10, -decimalPlace)*2 + result);
+            else if (num == '2' && lessThanOne) 
                 result += Math.pow(10, -decimalPlace)*2;
-                //System.out.println(result);
-            }
             else if (num == '3' && lessThanOne)
                 result += Math.pow(10, -decimalPlace)*3;
             else if (num == '4' && lessThanOne)
@@ -120,8 +154,6 @@ public class Calculator {
             else if (num == '9')
                 result += Math.pow(10, i)*9;
             
- 
-
         }
         if (!lessThanOne) {
             result = reverseNum(result);
