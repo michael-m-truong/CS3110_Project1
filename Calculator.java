@@ -39,6 +39,14 @@ public class Calculator {
         int dot_count = 0;
         for (int i = 0; i < str.length(); i++) {
             char num = str.charAt(i);
+            if (i == 0 && (num == 'E' || num == 'e'))
+                return false;
+            /*if (num == '.') {
+                boolean dot_after_e = false;
+                for (int j = i; j > 0; j--) {
+                    if (str.charAt(j) == 'e') {}
+                }
+            } */
             if ((i == 0 && num == '-') || ( i==0 && num == '+')) {
                 return false;
             }
@@ -66,8 +74,12 @@ public class Calculator {
                     return false;
                 if (dot_count > 1 || e_count > 1) 
                     return false;
+                //if (e_count > dot_count)
+                //    return false;
             }
             else if (num == '.') {
+                if (e_count > dot_count)
+                    return false;
                 dot_count++;
                 if (dot_count > 1 || e_count > 1) 
                     return false;
