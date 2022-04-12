@@ -39,6 +39,20 @@ public class Calculator {
         int dot_count = 0;
         for (int i = 0; i < str.length(); i++) {
             char num = str.charAt(i);
+            if ((i == 0 && num == '-') || ( i==0 && num == '+')) {
+                return false;
+            }
+            if ((num == '+' || num == '-')) {
+                if (i != 0) {
+                    if (str.charAt(i-1) != 'e' && str.charAt(i-1) != 'E') {
+                        return false;
+                    }
+                    if (num == '+') {
+                        
+                    }
+                }
+            }
+
             if (i != str.length()-1) {
                 char numNext = str.charAt(i+1);
                 if ((num  == '-' && numNext == '-') || (num  == '+' && numNext == '+') || (num  == '.' && numNext == '.')
@@ -100,6 +114,8 @@ public class Calculator {
             if (num == 'e' || num == 'E') {
                 powerCount++;
                 if (str.charAt(i+1) == '-')
+                    powerCount++;
+                    if (str.charAt(i+1) == '+') 
                     powerCount++;
                     char suffix = str.charAt(str.length()-1);
                     if (suffix == 'f' || suffix  == 'F' || suffix == 'd' || suffix == 'D') {
