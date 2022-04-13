@@ -41,12 +41,6 @@ public class Calculator {
             char num = str.charAt(i);
             if (i == 0 && (num == 'E' || num == 'e'))
                 return false;
-            /*if (num == '.') {
-                boolean dot_after_e = false;
-                for (int j = i; j > 0; j--) {
-                    if (str.charAt(j) == 'e') {}
-                }
-            } */
             if ((i == 0 && num == '-') || ( i==0 && num == '+') || ( i==0 && num == 'd')
             || ( i==0 && num == 'D') || ( i==0 && num == 'f') || ( i==0 && num == 'F')) {
                 return false;
@@ -75,8 +69,6 @@ public class Calculator {
                     return false;
                 if (dot_count > 1 || e_count > 1) 
                     return false;
-                //if (e_count > dot_count)
-                //    return false;
             }
             else if (num == '.') {
                 if (e_count > dot_count)
@@ -109,16 +101,13 @@ public class Calculator {
 
     private static double parseString(String str) {
         double result = 0;
-        boolean negativeNumber = false;
         boolean lessThanOne = false;
         boolean powerOn = false;
         double powerOf10 = 0;
         boolean powerof10_negative = false;
         int decimalPlace = 0;
-        int powerPlace = 0;
-        int placesOnRight = 0;
+        int placesOnLeft = 0;
         int powerCount = 0;
-        int suffix_count = 0;
         for (int i = 0; i < str.length(); i++) {
             char num = str.charAt(i);
             if (num == '.' || num == 'e' || num == 'E' || num == '-') 
@@ -126,7 +115,7 @@ public class Calculator {
             else if (num == 'f' || num == 'F' || num == 'd' || num == 'D') 
                 break;
             else
-                placesOnRight++;
+                placesOnLeft++;
         }
         for (int i = 0; i < str.length(); i++) {
             char num = str.charAt(i);
@@ -151,29 +140,23 @@ public class Calculator {
             else
                 powerCount++;
         }
-        //System.out.println(powerCount);
+
         powerCount = str.length() - powerCount;
         powerCount-=1;
-        placesOnRight--;
-        //System.out.println(powerCount);
+        placesOnLeft--;
 
         for (int i = 0; i < str.length(); i++) {
             if (lessThanOne)
                 decimalPlace++;
-            if (powerOn)
-                powerPlace++;
 
             char num = str.charAt(i);
-            if (num == '-' && i == 0)
-                negativeNumber = true;
-            else if (num == 'E' || num == 'e') {
+            if (num == 'E' || num == 'e') {
                 powerOn = true;
                 if (str.charAt(i+1) == '-') 
                     powerof10_negative = true;
             }
             else if (num == '.') {
                 lessThanOne = true;
-                //result = reverseNum(result);
             }
 
             /*Multiply by 10^n for e side of decimal */
@@ -224,53 +207,34 @@ public class Calculator {
 
 
             else if (num == '0')
-                result += Math.pow(10, placesOnRight--)*0;
+                result += Math.pow(10, placesOnLeft--)*0;
             else if (num == '1')
-                result += Math.pow(10, placesOnRight--)*1;
+                result += Math.pow(10, placesOnLeft--)*1;
             else if (num == '2')
-                result += Math.pow(10, placesOnRight--)*2;
+                result += Math.pow(10, placesOnLeft--)*2;
             else if (num == '3')
-                result += Math.pow(10, placesOnRight--)*3;
+                result += Math.pow(10, placesOnLeft--)*3;
             else if (num == '4')
-                result += Math.pow(10, placesOnRight--)*4;
+                result += Math.pow(10, placesOnLeft--)*4;
             else if (num == '5')
-                result += Math.pow(10, placesOnRight--)*5;
+                result += Math.pow(10, placesOnLeft--)*5;
             else if (num == '6')
-                result += Math.pow(10, placesOnRight--)*6;
+                result += Math.pow(10, placesOnLeft--)*6;
             else if (num == '7')
-                result += Math.pow(10, placesOnRight--)*7;
+                result += Math.pow(10, placesOnLeft--)*7;
             else if (num == '8')
-                result += Math.pow(10, placesOnRight--)*8;
+                result += Math.pow(10, placesOnLeft--)*8;
             else if (num == '9')
-                result += Math.pow(10, placesOnRight--)*9;
+                result += Math.pow(10, placesOnLeft--)*9;
             
         }
-        //if (!lessThanOne) {
-        //    result = reverseNum(result);
-        //}
-
-        //powerOf10 = reverseNum(powerOf10);
+    
         if (powerof10_negative) 
             result = result * Math.pow(10, -powerOf10);
         else
             result = result * Math.pow(10, powerOf10);
-
-        if (negativeNumber) {
-            result= -1*result;
-        }
         
         return result; 
     }
-
-    private static double reverseNum(double num) {
-        double reversedNumber = 0;
-        while (num >= 1) {
-            reversedNumber = Math.floor(reversedNumber * 10 + num % 10);
-            num = num / 10;
-        }
-        return reversedNumber;
-    }
-
-
 
 } 
