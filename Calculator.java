@@ -30,6 +30,28 @@ public class Calculator {
             char num = str.charAt(i);
             if (num != '_')
                 newStr+=num;
+            if (num == '_') {
+                if (i == 0) {
+                    newStr+=num;
+                }
+                else if (i == str.length()-1) {
+                    newStr+=num;
+                }
+                else if (i+1 != str.length()) {
+                    if (str.charAt(i+1) != '0' && str.charAt(i+1) != '1' && str.charAt(i+1) != '2' && str.charAt(i+1) != '3' && 
+                        str.charAt(i+1) != '4' && str.charAt(i+1) != '5' && str.charAt(i+1) != '6' && str.charAt(i+1) != '7' &&
+                        str.charAt(i+1) != '8' && str.charAt(i+1) != '9') {
+                            newStr+=num;
+                    }
+                    else if (str.charAt(i-1) != '0' && str.charAt(i-1) != '1' && str.charAt(i-1) != '2' && str.charAt(i-1) != '3' && 
+                            str.charAt(i-1) != '4' && str.charAt(i-1) != '5' && str.charAt(i-1) != '6' && str.charAt(i-1) != '7' &&
+                            str.charAt(i-1) != '8' && str.charAt(i-1) != '9') {
+                            newStr+=num;
+                        }
+                    
+                }
+
+            }
         }
         return newStr;
     }
@@ -39,10 +61,13 @@ public class Calculator {
         int dot_count = 0;
         for (int i = 0; i < str.length(); i++) {
             char num = str.charAt(i);
-            if (i == 0 && (num == 'E' || num == 'e'))
+            if (i == 0 && num == '.' && i == str.length()-1) {
+                return false;
+            }
+            if (i == 0 && (num == 'E' || num == 'e'))  //reject if first char of string is e,E
                 return false;
             if ((i == 0 && num == '-') || ( i==0 && num == '+') || ( i==0 && num == 'd')
-            || ( i==0 && num == 'D') || ( i==0 && num == 'f') || ( i==0 && num == 'F')) {
+            || ( i==0 && num == 'D') || ( i==0 && num == 'f') || ( i==0 && num == 'F')) { //reject if first char of string is 
                 return false;
             }
             if ((num == '+' || num == '-')) {
@@ -110,39 +135,29 @@ public class Calculator {
         int powerCount = 0;
         for (int i = 0; i < str.length(); i++) {
             char num = str.charAt(i);
-            if (num == '.' || num == 'e' || num == 'E' || num == '-') 
+            if (num == '.' || num == 'e' || num == 'E') 
                 break;
             else if (num == 'f' || num == 'F' || num == 'd' || num == 'D') 
                 break;
             else
                 placesOnLeft++;
         }
+    
+        boolean reached_E = false;
         for (int i = 0; i < str.length(); i++) {
             char num = str.charAt(i);
-            
-            if (num == 'e' || num == 'E') {
-                powerCount++;
-                if (str.charAt(i+1) == '-')
-                    powerCount++;
-                    if (str.charAt(i+1) == '+') 
-                    powerCount++;
-                    char suffix = str.charAt(str.length()-1);
-                    if (suffix == 'f' || suffix  == 'F' || suffix == 'd' || suffix == 'D') {
-                        powerCount++;
-                    }
-                break;
+            if (num == 'E' || num == 'e') {
+                reached_E = true;
             }
-        
-            else if (num == '.' || num == '-') {
-                powerCount++;
-                continue;
+            else if (reached_E) {
+                if (num == '-' || num == '+' || num == 'f' || num == 'F' || num == 'd' || num == 'D') {
+                    continue;
+                }
+                else 
+                    powerCount++;
             }
-            else
-                powerCount++;
         }
-
-        powerCount = str.length() - powerCount;
-        powerCount-=1;
+        powerCount--;
         placesOnLeft--;
 
         for (int i = 0; i < str.length(); i++) {
