@@ -47,7 +47,8 @@ public class Calculator {
                     if (str.charAt(j) == 'e') {}
                 }
             } */
-            if ((i == 0 && num == '-') || ( i==0 && num == '+')) {
+            if ((i == 0 && num == '-') || ( i==0 && num == '+') || ( i==0 && num == 'd')
+            || ( i==0 && num == 'D') || ( i==0 && num == 'f') || ( i==0 && num == 'F')) {
                 return false;
             }
             if ((num == '+' || num == '-')) {
@@ -116,6 +117,8 @@ public class Calculator {
         for (int i = 0; i < str.length(); i++) {
             char num = str.charAt(i);
             if (num == '.' || num == 'e' || num == 'E' || num == '-') 
+                break;
+            else if (num == 'f' || num == 'F' || num == 'd' || num == 'D') 
                 break;
             else
                 placesOnRight++;
