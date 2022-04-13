@@ -98,6 +98,11 @@ public class Calculator {
             else if (num != '0' && num != '1' && num != '2' && num != '3' && num != '4' && num != '5' && num != '6' && num != '7' && num != '8' 
                 && num != '9' && num != '.' && num != '+' && num != '-') 
                 return false;
+            if (i == str.length()-1) {
+                if (dot_count == 0 && e_count == 0) {
+                    return false;
+                }
+            }
         }
         return true;
     }
