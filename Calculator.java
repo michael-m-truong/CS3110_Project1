@@ -9,35 +9,34 @@ public class Calculator {
             System.out.print("Enter input string to convert to decimal (press q to quit): ");
             inputStr = input.nextLine();
             if (inputStr.equals("q")) {
-                //input.close();
                 break;
             }
-            inputStr = removeUnderscore(inputStr);
-            if (inputValidation(inputStr)) {
+            inputStr = underscoreValidation(inputStr);
+            if (inputValidation(inputStr)) {    
                 double value = parseString(inputStr);
                 System.out.println(value);
                 
             }
-            else 
+            else  
                 System.out.println("Not a valid Java floating decimal literal");
         }
         input.close();
     }
 
-    private static String removeUnderscore(String str) {
+    private static String underscoreValidation(String str) {   //STATE1
         String newStr = "";
         for (int i = 0; i < str.length(); i++) {
             char num = str.charAt(i);
-            if (num != '_')
+            if (num != '_')         
                 newStr+=num;
-            if (num == '_') {
+            if (num == '_') {       
                 if (i == 0) {
                     newStr+=num;
                 }
                 else if (i == str.length()-1) {
                     newStr+=num;
                 }
-                else if (i+1 != str.length()) {
+                else if (i+1 != str.length()) {   //if '_' is not b/w 2 digits, reject
                     if (str.charAt(i+1) != '0' && str.charAt(i+1) != '1' && str.charAt(i+1) != '2' && str.charAt(i+1) != '3' && 
                         str.charAt(i+1) != '4' && str.charAt(i+1) != '5' && str.charAt(i+1) != '6' && str.charAt(i+1) != '7' &&
                         str.charAt(i+1) != '8' && str.charAt(i+1) != '9') {
@@ -56,62 +55,64 @@ public class Calculator {
         return newStr;
     }
 
-    private static boolean inputValidation(String str) {
+    private static boolean inputValidation(String str) {     //STATE2; if return false -> bad state
+                                                            //if return true -> go to STATE3
         int e_count = 0;
         int dot_count = 0;
+        if (str.length() == 0) {  //reject empty string
+            return false;
+        }
         for (int i = 0; i < str.length(); i++) {
             char num = str.charAt(i);
-            if (i == 0 && num == '.' && i == str.length()-1) {
+            if (i == 0 && num == '.' && i == str.length()-1) {    //reject if str = '.'
                 return false;
             }
             if (i == 0 && (num == 'E' || num == 'e'))  //reject if first char of string is e,E
                 return false;
             if ((i == 0 && num == '-') || ( i==0 && num == '+') || ( i==0 && num == 'd')
-            || ( i==0 && num == 'D') || ( i==0 && num == 'f') || ( i==0 && num == 'F')) { //reject if first char of string is 
+            || ( i==0 && num == 'D') || ( i==0 && num == 'f') || ( i==0 && num == 'F')) { //reject if first char of string is the following chars
                 return false;
             }
-            if ((num == '+' || num == '-')) {
+            if ((num == '+' || num == '-')) {            //reject if there is no 'e,E' before '+,-'
                 if (i != 0) {
                     if (str.charAt(i-1) != 'e' && str.charAt(i-1) != 'E') {
                         return false;
                     }
-                    if (num == '+') {
-                        
-                    }
                 }
             }
 
-            if (i != str.length()-1) {
-                char numNext = str.charAt(i+1);
+            if (i != str.length()-1) {                 
+                char numNext = str.charAt(i+1);      //reject if operators are consecutive (for proj2)
                 if ((num  == '-' && numNext == '-') || (num  == '+' && numNext == '+') || (num  == '.' && numNext == '.')
                 || (num  == '/' && numNext == '/') || (num  == '*' && numNext == '*')) {
                     return false;
                 }
             }
-            if (num == 'e' || num == 'E') {
+            if (num == 'e' || num == 'E') {          
                 e_count++;
-                if (i == str.length()-1) 
+                if (i == str.length()-1)           //reject if last char of str is 'E,e'
                     return false;
-                if (dot_count > 1 || e_count > 1) 
+                if (dot_count > 1 || e_count > 1)   //reject if more than 1 'e,E' or '.' in num
                     return false;
             }
             else if (num == '.') {
-                if (e_count > dot_count)
+                if (e_count > dot_count)            //reject if num is an integer; only accepts floats
                     return false;
                 dot_count++;
-                if (dot_count > 1 || e_count > 1) 
+                if (dot_count > 1 || e_count > 1)     //reject if more than 1 'e,E' or '.' in num
                     return false;
             }
-            else if (i == str.length()-1) {
+            else if (i == str.length()-1) {         
                 if (num != '0' && num != '1' && num != '2' && num != '3' && num != '4' && num != '5' && num != '6' && num != '7' 
                 && num != '8' && num != '9' && num != '.' && num != '+' && num != '-') {
-                    if (num == 'f' || num == 'F' || num == 'd' || num == 'D') {
+                    if (num == 'f' || num == 'F' || num == 'd' || num == 'D') {  //accept suffixes
                         return true;
                     }
                     else
                         return false;
                 }
-            }
+            }                                         
+            //reject other alphabet
             else if (num != '0' && num != '1' && num != '2' && num != '3' && num != '4' && num != '5' && num != '6' && num != '7' && num != '8' 
                 && num != '9' && num != '.' && num != '+' && num != '-') 
                 return false;
@@ -124,7 +125,7 @@ public class Calculator {
         return true;
     }
 
-    private static double parseString(String str) {
+    private static double parseString(String str) {    //STATE3 -> accept state
         double result = 0;
         boolean lessThanOne = false;
         boolean powerOn = false;
