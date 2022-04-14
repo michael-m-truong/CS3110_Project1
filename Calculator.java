@@ -23,6 +23,18 @@ public class Calculator {
         input.close();
     }
 
+    private static boolean underscoreValidation_(int i, String str) {   //helper function
+        if (str.charAt(i) == '_') {
+            return underscoreValidation_(i+1, str);
+        } 
+        else if (str.charAt(i) != '0' && str.charAt(i) != '1' && str.charAt(i) != '2' && str.charAt(i) != '3' && 
+            str.charAt(i) != '4' && str.charAt(i) != '5' && str.charAt(i) != '6' && str.charAt(i) != '7' &&
+            str.charAt(i) != '8' && str.charAt(i) != '9') {
+                return false;
+        }
+        return true;
+    }
+
     private static String underscoreValidation(String str) {   //STATE1
         String newStr = "";
         for (int i = 0; i < str.length(); i++) {
@@ -36,17 +48,21 @@ public class Calculator {
                 else if (i == str.length()-1) {
                     newStr+=num;
                 }
-                else if (i+1 != str.length()) {   //if '_' is not b/w 2 digits, reject
-                    if (str.charAt(i+1) != '0' && str.charAt(i+1) != '1' && str.charAt(i+1) != '2' && str.charAt(i+1) != '3' && 
-                        str.charAt(i+1) != '4' && str.charAt(i+1) != '5' && str.charAt(i+1) != '6' && str.charAt(i+1) != '7' &&
-                        str.charAt(i+1) != '8' && str.charAt(i+1) != '9') {
-                            newStr+=num;
-                    }
-                    else if (str.charAt(i-1) != '0' && str.charAt(i-1) != '1' && str.charAt(i-1) != '2' && str.charAt(i-1) != '3' && 
+                else if (i != str.length()-1) {   //if '_' is not b/w 2 digits, reject
+                        if (str.charAt(i-1) != '0' && str.charAt(i-1) != '1' && str.charAt(i-1) != '2' && str.charAt(i-1) != '3' && 
                             str.charAt(i-1) != '4' && str.charAt(i-1) != '5' && str.charAt(i-1) != '6' && str.charAt(i-1) != '7' &&
                             str.charAt(i-1) != '8' && str.charAt(i-1) != '9') {
+                            if (str.charAt(i-1) == '_') {
+                                continue;
+                            }
+                            else
+                                newStr+=num;
+                            
+                        }
+                        else if (!underscoreValidation_(i+1, str)) {
                             newStr+=num;
                         }
+
                     
                 }
 
