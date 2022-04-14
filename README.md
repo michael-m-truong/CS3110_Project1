@@ -6,4 +6,6 @@
 3) Type "java Calculator" 
 
 Example: 
+
+
 ![image](https://user-images.githubusercontent.com/73093864/163293689-ad5deffb-bc0f-43be-a10c-c3b8417c6d0a.png)
