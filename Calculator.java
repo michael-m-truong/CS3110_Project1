@@ -90,6 +90,9 @@ public class Calculator {
                 return false;
             }
             if ((num == '+' || num == '-')) {            //reject if there is no 'e,E' before '+,-'
+                if (i == str.length()-1) {
+                    return false;
+                }
                 if (i != 0) {
                     if (str.charAt(i-1) != 'e' && str.charAt(i-1) != 'E') {
                         return false;
