@@ -115,7 +115,7 @@ public class Calculator {
                     return false;
             }
             else if (num == '.') {
-                if (e_count > dot_count)            //reject if num is an integer; only accepts floats
+                if (e_count > dot_count)            //reject there is a '.' anywhere after an 'e'
                     return false;
                 dot_count++;
                 if (dot_count > 1 || e_count > 1)     //reject if more than 1 'e,E' or '.' in num
@@ -136,7 +136,7 @@ public class Calculator {
                 && num != '9' && num != '.' && num != '+' && num != '-') 
                 return false;
             if (i == str.length()-1) {
-                if (dot_count == 0 && e_count == 0) {
+                if (dot_count == 0 && e_count == 0) {   //reject if num is an integer; only accepts floats
                     return false;
                 }
             }
